@@ -10,14 +10,28 @@ RUN apt-get update && apt-get install -y \
 	net-tools \
 	usbutils \
 	wireless-tools \
+	chromium-browser \
+	fbset \
+	htop \
+	libnss3 \
+	libraspberrypi-bin \
+	matchbox \
+	psmisc \
+	sqlite3 \
+	ttf-mscorefonts-installer \
+	x11-xserver-utils \
+	xinit \
+	xwit
 	&& rm -rf /var/lib/apt/lists/*
 
 COPY ./assets/bind /etc/bind
 
 RUN mkdir -p /usr/src/app/
+ && ln -s /usr/src/app /app
 WORKDIR /usr/src/app
 
 COPY package.json ./
+COPY package.json /usr/src/app/
 RUN JOBS=MAX npm install --unsafe-perm --production && npm cache clean
 
 COPY bower.json .bowerrc ./
@@ -25,6 +39,7 @@ RUN ./node_modules/.bin/bower --allow-root install \
 	&& ./node_modules/.bin/bower --allow-root cache clean
 
 COPY . ./
+COPY . /usr/src/app
 RUN ./node_modules/.bin/coffee -c ./src
 RUN chmod +x ./start
 

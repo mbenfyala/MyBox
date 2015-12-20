@@ -1,6 +1,6 @@
 #!/bin/bash
 npm start
-
+npm server.js
 while true
 do
 	echo "App exited but container is still running to allow web terminal access"
